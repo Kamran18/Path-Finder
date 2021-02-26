@@ -10,7 +10,10 @@ function Controls({
   setAlgorithm,
   runAnimation,
   isAnimationRunning,
+  handleGround,
 }) {
+  const [clearGroundRequired, setclearGroundRequired] = useState(false);
+
   const handleClick = (event) => {
     const id = event.target.id;
     const value = event.target.value;
@@ -21,7 +24,16 @@ function Controls({
         runAnimation();
         break;
       case "algorithm":
-        if (value !== "") setAlgorithm(value);
+        if (value !== "") {
+          if (value === "Binary Search") {
+            setclearGroundRequired(true);
+            handleGround(true);
+          } else {
+            setclearGroundRequired(false);
+            handleGround();
+          }
+          setAlgorithm(value);
+        }
         break;
       case "speed":
         if (value !== "") handleControls("speed", Number(value));
@@ -29,8 +41,8 @@ function Controls({
       case "clearGround":
         handleControls("clearGround");
         break;
-      case "resetGround":
-        handleControls("resetGround");
+      case "randomGround":
+        handleControls("randomGround");
     }
   };
 
@@ -62,7 +74,7 @@ function Controls({
           size="lg"
           icon={<FaHammer />}
           onClick={handleToolHammer}
-          disabled={isAnimationRunning}
+          disabled={isAnimationRunning || clearGroundRequired}
         />
         <IconButton
           variant="outline"
@@ -72,7 +84,7 @@ function Controls({
           size="lg"
           onClick={handleToolWall}
           icon={<GiBrickWall />}
-          disabled={isAnimationRunning}
+          disabled={isAnimationRunning || clearGroundRequired}
         />
         <IconButton
           variant="outline"
@@ -82,7 +94,7 @@ function Controls({
           size="lg"
           icon={<GiSeatedMouse />}
           onClick={handleToolMouse}
-          disabled={isAnimationRunning}
+          disabled={isAnimationRunning || clearGroundRequired}
         />
         <IconButton
           variant="outline"
@@ -123,11 +135,11 @@ function Controls({
       <Button
         variant="outline"
         w="100%"
-        id="resetGround"
+        id="randomGround"
         onClick={handleClick}
-        disabled={isAnimationRunning}
+        disabled={isAnimationRunning || clearGroundRequired}
       >
-        RESET GROUND
+        RANDOM GROUND
       </Button>
 
       <Button

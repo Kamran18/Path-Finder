@@ -1,39 +1,29 @@
-const binarySearch = (targetRow, targetCol, nodesState, changeState, speed) => {
-    let nodes = []
-    for(let i=0; i<13; i++){
-      let tempNodes = [], tempDp = []
-      for(let j=0; j<20; j++){
-        tempNodes.push({...nodesState[i][j]})
-      }
-      nodes.push(tempNodes)
-    }
-  
-    let animationFrames = [];
-    findPath(nodes, animationFrames, startRow, startCol, dp);
-    animate(changeState, animationFrames, speed);
-    return (animationFrames.length-1) * speed + 10;
-  };
-  
-  
-  
-  const findPath = (nodes, animationFrames, row, col, dp) => {
+const binarySearch = (targetRow, targetCol, changeState, speed) => {
+  let animationFrames = [];
+  findPath(animationFrames, targetRow, targetCol);
+  animate(changeState, animationFrames, speed);
+  return (animationFrames.length - 1) * speed + 10;
+};
+
+const findPath = (nodes, animationFrames, targetRow, targetCol) => {
+  let startRow = 0,
+    startCol = 0,
+    endRow = 12,
+    endCol = 19,
+    start = startRow * 13 + startCol,
+    end = endRow * 13 + endCol;
     
-  };
-  
-  const animate = (changeState, animationFrames, speed) => {
-    // console.log("animation", animationFrames)
-    for(let i=1; i<animationFrames.length; i++){
-      const [row, col, nodeState] = animationFrames[i];
-      setTimeout(() => {
-        if(nodeState === "."){
-          changeState(row, col, "s", true)
-        }
-        else if(nodeState === "u"){
-          changeState(row, col, ".", true)
-        }
-      }, (i*speed));
+  while (start <= end) {
+    let mid = start + (end - start) / 2,
+      midRow = mid / 20,
+      midCol = mid % 20;
+    if (midRow === targetRow && midCol === targetCol) {
+    } else if (midRow <= targetRow && midCol === targetCol) {
+    } else {
     }
   }
-  
-  export default binarySearch;
-  
+};
+
+const animate = (changeState, animationFrames, speed) => {};
+
+export default binarySearch;

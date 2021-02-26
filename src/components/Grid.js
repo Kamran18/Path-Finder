@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import Node from "../components/Node";
-import ratInMaze from "../algorithms/ratInMaze";
 import { Flex, Center } from "@chakra-ui/react";
 import Controls from "../components/Controls";
-import getInitialGround from "./Ground";
+import getRandomGround from "../algorithms/Ground";
+import ratInMaze from "../algorithms/ratInMaze";
+import breathFirstSearch from "../algorithms/breathFirstSearch";
+import binarySearch from "../algorithms/binarySearch";
 
 export class Grid extends Component {
   constructor(props) {
@@ -47,13 +49,18 @@ export class Grid extends Component {
       newState[row][col] = { ...newState[row][col], type, visited };
       this.setState({ nodes: newState, endRow: row, endCol: col });
     } else {
+      //if current node = "c" or "m" make -1 in state
+      if(newState[row][col].type === "m")
+        this.setState({startRow: -1, startCol: -1})
+      else if(newState[row][col].type === "c")
+        this.setState({endRow: -1, endCol: -1})
       newState[row][col] = { ...newState[row][col], type, visited };
       this.setState({ nodes: newState });
     }
   };
 
   handleControls = (control, value = "") => {
-    if (control === "resetGround") this.handleGround();
+    if (control === "randomGround") this.handleGround();
     else if (control === "clearGround") this.handleGround(true);
     else {
       this.setState({
@@ -96,17 +103,16 @@ export class Grid extends Component {
           speed
         );
       else if (algorithm === "Binary Search")
-        time = ratInMaze(
-          startRow,
-          startCol,
-          nodes,
+        time = binarySearch(
+          endRow,
+          endCol,
           this.handleNodeState,
           speed
         );
       setTimeout(() => {
         this.setState({
           isAnimationRunning: false,
-          toolActive: "none"
+          toolActive: "none",
         });
       }, time);
     }
@@ -114,7 +120,7 @@ export class Grid extends Component {
 
   handleGround = (clearGround = false) => {
     const { rows, columns } = this.props.gridDimentions;
-    const initialGround = getInitialGround();
+    const randomGround = getRandomGround();
     let nodes = [];
 
     for (let row = 0; row < rows; row++) {
@@ -124,7 +130,7 @@ export class Grid extends Component {
           row,
           col,
           visited: false,
-          type: initialGround[row][col],
+          type: randomGround[row][col],
         };
         if (clearGround === true) node.type = ".";
         else if (node.type === "m")
@@ -159,6 +165,7 @@ export class Grid extends Component {
                     handleNodeState={this.handleNodeState}
                     isAnimationRunning={this.state.isAnimationRunning}
                     toolActive={this.state.toolActive}
+                    algorithm={this.props.algorithm}
                   />
                 ))}
               </Flex>
@@ -170,6 +177,7 @@ export class Grid extends Component {
           setAlgorithm={this.props.setAlgorithm}
           runAnimation={this.runAnimation}
           isAnimationRunning={this.state.isAnimationRunning}
+          handleGround={this.handleGround}
         />
       </Flex>
     );

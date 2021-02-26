@@ -18,8 +18,6 @@ const mouseAndCheese = (startRow, startCol, nodesState, changeState, speed) => {
   return (animationFrames.length-1) * speed + 10;
 };
 
-
-
 const findPath = (nodes, animationFrames, row, col, dp) => {
   if (
     row > -1 &&

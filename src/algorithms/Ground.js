@@ -1,4 +1,4 @@
-const initialGround = [
+const randomGround = [
     ["m",".",".","w","w","w","w","w","w","w",".","w","w","w","w","w","w","w","w",".",],
     [".","w",".",".",".",".",".",".",".",".",".","w",".",".","w",".","w",".",".",".",],
     [".",".",".","w","w","w",".","w","w",".","w","w","w",".","w",".","w","w",".","w",],
@@ -15,8 +15,16 @@ const initialGround = [
     ["w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w",".",],
   ];
   
-const getInitialGround = () => {
-    return initialGround;
+const getRandomGround = () => {
+  let types = ['.', 'w', '.', '.'];
+  for(let i=0; i<13; i++){
+    for(let j=0; j<20; j++){
+      randomGround[i][j] = types[Math.floor(Math.random() * 4)];
+    }
+  }
+  randomGround[Math.floor(Math.random() * 13)][Math.floor(Math.random() * 20)] = "m"
+  randomGround[Math.floor(Math.random() * 13)][Math.floor(Math.random() * 20)] = "c"
+  return randomGround;
 }
 
-export default getInitialGround;
+export default getRandomGround;
